@@ -75,3 +75,10 @@ and edit this package under `packages/log/`. Sibling `path@` dependencies
 are resolved from that checkout. Encore CI tests the exact package commits
 with the compiler on all supported native targets. Published package archives
 rewrite path dependencies to exact index versions.
+
+ConsoleSink defaults to plain labels. Rich's optional `logging` adapter supplies
+colored labels through `Formatter::with_labels`; no ANSI implementation or
+colorterm dependency remains in log. `Formatter::colored()` requests an injected
+palette and falls back to plain labels when none is provided. Console sinks
+always apply std's TTY/NO_COLOR/TERM policy, including custom formatters. Plain
+formatters remain plain on a TTY. File/writer sinks use their explicit formatter.

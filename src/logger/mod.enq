@@ -1,9 +1,11 @@
 import core::testing::assert
 import core::vec::Vec
+
 import std::os::{read_file, write_file}
 
 import refrain::console_sink::ConsoleSink
 import refrain::file_sink::FileSink
+import refrain::formatter::Formatter
 import refrain::level::{LogLevel, level_enabled}
 import refrain::record::LogRecord
 import refrain::sink::{LogSink, Writable}
@@ -25,6 +27,18 @@ impl for Logger {
     pub fn console(target: str) -> Self {
         let mut logger = Self::new(target)
         logger.add_sink(ConsoleSink::stdout() as dyn LogSink)
+        ret logger
+    }
+
+    pub fn console_with_formatter(target: str, formatter: Formatter) -> Self {
+        let mut logger = Self::new(target)
+        logger.add_sink(ConsoleSink::new(formatter, false) as dyn LogSink)
+        ret logger
+    }
+
+    pub fn stderr_with_formatter(target: str, formatter: Formatter) -> Self {
+        let mut logger = Self::new(target)
+        logger.add_sink(ConsoleSink::new(formatter, true) as dyn LogSink)
         ret logger
     }
 

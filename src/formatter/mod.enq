@@ -1,45 +1,60 @@
-import refrain::level::{LogLevel, level_label, level_label_colored}
+import core::vec::Vec
+
+import refrain::level::{LogLevel, level_label, level_weight}
 
 pub struct Formatter {
     colorize: bool
     include_target: bool
     include_newline: bool
+    labels: Vec[str]
 }
 
 impl for Formatter {
     pub fn plain() -> Self {
         ret Self {
-            false, true, true
+            false, true, true, Vec[str]::new()
         }
     }
 
     pub fn colored() -> Self {
         ret Self {
-            true, true, true
+            true, true, true, Vec[str]::new()
         }
     }
 
     pub fn with_color(self: Self, enabled: bool) -> Self {
         ret Self {
-            enabled, self.include_target, self.include_newline
+            enabled, self.include_target, self.include_newline, self.labels
         }
     }
 
     pub fn with_target(self: Self, enabled: bool) -> Self {
         ret Self {
-            self.colorize, enabled, self.include_newline
+            self.colorize, enabled, self.include_newline, self.labels
         }
     }
 
     pub fn with_newline(self: Self, enabled: bool) -> Self {
         ret Self {
-            self.colorize, self.include_target, enabled
+            self.colorize, self.include_target, enabled, self.labels
         }
+    }
+
+    /// Six labels in Trace, Debug, Info, Warn, Error, Fatal order.
+    /// An absent label falls back to the plain spelling.
+    pub fn with_labels(self: Self, labels: Vec[str]) -> Self {
+        ret Self { self.colorize, self.include_target, self.include_newline, labels }
+    }
+
+    /// Terminal detection may disable color but never enables an explicitly
+    /// plain formatter. File and writer sinks do not apply terminal policy.
+    pub fn for_terminal(self: Self, enabled: bool) -> Self {
+        ret self.with_color(self.colorize && enabled)
     }
 
     pub fn format(self: Self, level: LogLevel, target: str, message: str) -> str {
         let mut out = if self.colorize {
-            level_label_colored(level)
+            self.labels.get(level_weight(level) / 10 - 1).unwrap_or(level_label(level))
         } else {
             level_label(level)
         }
