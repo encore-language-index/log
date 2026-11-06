@@ -1,4 +1,5 @@
 import std::io::{print, eprint}
+import std::terminal::color_enabled
 
 import refrain::formatter::Formatter
 import refrain::level::LogLevel
@@ -12,13 +13,13 @@ pub struct ConsoleSink {
 impl for ConsoleSink {
     pub fn stdout() -> Self {
         ret Self {
-            Formatter::colored(), false
+            Formatter::plain(), false
         }
     }
 
     pub fn stderr() -> Self {
         ret Self {
-            Formatter::colored(), true
+            Formatter::plain(), true
         }
     }
 
@@ -43,7 +44,8 @@ impl for ConsoleSink {
 
 impl LogSink for ConsoleSink {
     fn write(self: ConsoleSink, level: LogLevel, target: str, message: str) -> i32 {
-        let rendered = self.formatter.format(level, target, message)
+        let fd = if self.use_stderr { 2_i32 } else { 1_i32 }
+        let rendered = self.formatter.for_terminal(color_enabled(fd)).format(level, target, message)
         if self.use_stderr {
             ret eprint(rendered)
         }

@@ -1,5 +1,3 @@
-import colorterm::{styled, Color, Style}
-
 pub enum LogLevel {
     Trace,
     Debug,
@@ -63,25 +61,5 @@ pub fn level_label(level: LogLevel) -> str {
     ret "[" + level_name(level) + "]"
 }
 
-pub fn level_label_colored(level: LogLevel) -> str {
-    match level {
-        LogLevel::Trace => {
-            ret styled(level_label(level), Color::White, Style::Dim)
-        }
-        LogLevel::Debug => {
-            ret styled(level_label(level), Color::Blue, Style::Normal)
-        }
-        LogLevel::Info => {
-            ret styled(level_label(level), Color::Cyan, Style::Normal)
-        }
-        LogLevel::Warn => {
-            ret styled(level_label(level), Color::Yellow, Style::Bold)
-        }
-        LogLevel::Error => {
-            ret styled(level_label(level), Color::Red, Style::Bold)
-        }
-        LogLevel::Fatal => {
-            ret styled(level_label(level), Color::Magenta, Style::Bold)
-        }
-    }
-}
+/// Compatibility spelling. Presentation palettes are supplied by rich::logging.
+pub fn level_label_colored(level: LogLevel) -> str { ret level_label(level) }
