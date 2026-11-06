@@ -1,10 +1,11 @@
-import refrain::formatter::Formatter
 import core::testing::assert
 import core::vec::Vec
+
 import std::os::{read_file, write_file}
 
 import refrain::console_sink::ConsoleSink
 import refrain::file_sink::FileSink
+import refrain::formatter::Formatter
 import refrain::level::{LogLevel, level_enabled}
 import refrain::record::LogRecord
 import refrain::sink::{LogSink, Writable}
