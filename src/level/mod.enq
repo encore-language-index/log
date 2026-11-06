@@ -62,4 +62,6 @@ pub fn level_label(level: LogLevel) -> str {
 }
 
 /// Compatibility spelling. Presentation palettes are supplied by rich::logging.
-pub fn level_label_colored(level: LogLevel) -> str { ret level_label(level) }
+pub fn level_label_colored(level: LogLevel) -> str {
+    ret level_label(level)
+}

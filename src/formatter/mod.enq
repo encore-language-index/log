@@ -1,4 +1,5 @@
 import core::vec::Vec
+
 import refrain::level::{LogLevel, level_label, level_weight}
 
 pub struct Formatter {
